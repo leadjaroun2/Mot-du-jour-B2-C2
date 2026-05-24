@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Apprentissage A1-B1</title>
+    <style>
+        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background: #f0f2f5; }
+        .carte { background: white; padding: 50px; border-radius: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; cursor: pointer; width: 300px; }
+        .niveau { font-size: 0.8em; color: #888; margin-bottom: 10px; }
+        #motFr { font-size: 2em; margin: 0; }
+        #motEn { font-size: 1.5em; color: #2f54eb; margin-top: 20px; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="carte" onclick="reveleTraduction()">
+        <div id="niveau" class="niveau">Niveau: ...</div>
+        <h1 id="motFr">Chargement...</h1>
+        <p id="motEn">Cliquez pour voir la traduction</p>
+    </div>
+
+    <script>
+        let baseDeDonnees = [];
+        fetch('mots.json')
+            .then(res => res.json())
+            .then(dico => {
+                baseDeDonnees = dico;
+                tirerUnMot();
+            });
+
+        function tirerUnMot() {
+            const mot = baseDeDonnees[Math.floor(Math.random() * baseDeDonnees.length)];
+            document.getElementById("motFr").innerText = mot.fr;
+            document.getElementById("motEn").innerText = mot.en;
+            document.getElementById("niveau").innerText = "Niveau: " + mot.niveau;
+            document.getElementById("motEn").style.display = "none";
+        }
+
+        function reveleTraduction() {
+            const el = document.getElementById("motEn");
+            if (el.style.display === "none") {
+                el.style.display = "block";
+            } else {
+                tirerUnMot(); // On tire un nouveau mot si on reclique
+            }
+        }
+    </script>
+</body>
+</html>
